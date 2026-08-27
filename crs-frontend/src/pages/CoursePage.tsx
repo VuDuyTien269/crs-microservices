@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { getCourses } from "../api/courseApi";
-
-interface Course {
-    id: number;
-    code: string;
-    name: string;
-    description?: string;
-}
+import type { Course } from "../types/course";
 
 function CoursePage() {
     const [courses, setCourses] = useState<Course[]>([]);
@@ -14,32 +8,41 @@ function CoursePage() {
     const [error, setError] = useState("");
 
     useEffect(() => {
+        const loadCourses = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                const response = await getCourses();
+
+                console.log("Dữ liệu courses:", response.data);
+
+                setCourses(response.data.content);
+            } catch (err) {
+                console.error("Lỗi khi tải courses:", err);
+                setError("Không thể tải danh sách khóa học");
+            } finally {
+                setLoading(false);
+            }
+        };
+
         loadCourses();
     }, []);
 
-    const loadCourses = async () => {
-        try {
-            setLoading(true);
-
-            const data = await getCourses();
-
-            console.log("Dữ liệu courses:", data);
-
-            setCourses(data);
-        } catch (err) {
-            console.error(err);
-            setError("Không thể tải danh sách khóa học");
-        } finally {
-            setLoading(false);
-        }
-    };
-
     if (loading) {
-        return <h2>Đang tải khóa học...</h2>;
+        return (
+            <div style={{ padding: "30px" }}>
+                <h2>Đang tải khóa học...</h2>
+            </div>
+        );
     }
 
     if (error) {
-        return <h2>{error}</h2>;
+        return (
+            <div style={{ padding: "30px" }}>
+                <h2>{error}</h2>
+            </div>
+        );
     }
 
     return (
@@ -60,9 +63,10 @@ function CoursePage() {
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Mã khóa học</th>
-                        <th>Tên khóa học</th>
-                        <th>Mô tả</th>
+                        <th>Tên môn học</th>
+                        <th>Số tín chỉ</th>
+                        <th>Số chỗ tối đa</th>
+                        <th>Số chỗ còn lại</th>
                     </tr>
                     </thead>
 
@@ -70,9 +74,10 @@ function CoursePage() {
                     {courses.map((course) => (
                         <tr key={course.id}>
                             <td>{course.id}</td>
-                            <td>{course.code}</td>
-                            <td>{course.name}</td>
-                            <td>{course.description}</td>
+                            <td>{course.tenMonHoc}</td>
+                            <td>{course.soTinChi}</td>
+                            <td>{course.soChoToiDa}</td>
+                            <td>{course.soChoConLai}</td>
                         </tr>
                     ))}
                     </tbody>
