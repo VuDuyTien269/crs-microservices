@@ -1,8 +1,9 @@
 import axiosClient from './axiosClient';
+
 import type {
     Course,
     PagedResponse,
-    CourseFormValues
+    CourseFormValues,
 } from '../types/course';
 
 export const getCourses = (
@@ -22,7 +23,9 @@ export const getCourses = (
     );
 };
 
-const toPayload = (values: CourseFormValues) => ({
+const toPayload = (
+    values: CourseFormValues
+) => ({
     tenMonHoc: values.tenMonHoc.trim(),
     soTinChi: Number(values.soTinChi),
     soChoToiDa: Number(values.soChoToiDa),
@@ -47,8 +50,20 @@ export const updateCourse = (
     );
 };
 
-export const deleteCourse = (id: number) => {
+export const deleteCourse = (
+    id: number
+) => {
     return axiosClient.delete(
+        `/api/courses/${id}`
+    );
+};
+
+// Buổi 9:
+// Lấy thông tin một môn học theo ID
+export const getCourseById = (
+    id: number
+) => {
+    return axiosClient.get<Course>(
         `/api/courses/${id}`
     );
 };

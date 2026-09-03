@@ -32,10 +32,14 @@ export default function Navbar() {
                 alignItems: 'center',
             }}
         >
+            {/* Danh sách môn học */}
             <Link to="/courses">
                 Danh sách môn học
             </Link>
 
+            {/* =========================
+                ADMIN
+            ========================== */}
             {isAuthenticated &&
                 user?.role === 'ADMIN' && (
                     <Link to="/admin/courses">
@@ -43,13 +47,27 @@ export default function Navbar() {
                     </Link>
                 )}
 
+            {/* =========================
+                STUDENT
+            ========================== */}
             {isAuthenticated &&
                 user?.role === 'STUDENT' && (
-                    <Link to="/register-course">
-                        Đăng ký học phần
-                    </Link>
+                    <>
+                        {/* Đăng ký học phần */}
+                        <Link to="/register-course">
+                            Đăng ký học phần
+                        </Link>
+
+                        {/* Môn học đã đăng ký */}
+                        <Link to="/my-registrations">
+                            Môn học đã đăng ký
+                        </Link>
+                    </>
                 )}
 
+            {/* =========================
+                THÔNG TIN NGƯỜI DÙNG
+            ========================== */}
             <div
                 style={{
                     marginLeft: 'auto',
@@ -68,9 +86,7 @@ export default function Navbar() {
                         </span>
 
                         <button
-                            onClick={
-                                handleLogout
-                            }
+                            onClick={handleLogout}
                         >
                             Đăng xuất
                         </button>

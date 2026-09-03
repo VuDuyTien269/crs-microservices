@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import CoursesPage from "./pages/CoursesPage";
 import AdminCoursesPage from "./pages/AdminCoursesPage";
 import RegisterCoursePage from "./pages/RegisterCoursePage";
+import MyRegistrationsPage from "./pages/MyRegistrationsPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -85,10 +86,19 @@ function App() {
                             />
                         }
                     >
+                        {/* Đăng ký học phần */}
                         <Route
                             path="/register-course"
                             element={
                                 <RegisterCoursePage />
+                            }
+                        />
+
+                        {/* Môn học đã đăng ký */}
+                        <Route
+                            path="/my-registrations"
+                            element={
+                                <MyRegistrationsPage />
                             }
                         />
                     </Route>
