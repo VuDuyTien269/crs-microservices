@@ -1,5 +1,4 @@
 import axiosClient from './axiosClient';
-
 import type {
     Course,
     PagedResponse,
@@ -23,9 +22,7 @@ export const getCourses = (
     );
 };
 
-const toPayload = (
-    values: CourseFormValues
-) => ({
+const toPayload = (values: CourseFormValues) => ({
     tenMonHoc: values.tenMonHoc.trim(),
     soTinChi: Number(values.soTinChi),
     soChoToiDa: Number(values.soChoToiDa),

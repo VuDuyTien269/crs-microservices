@@ -6,8 +6,10 @@ interface CourseListProps {
     state: LoadState;
     errorMessage: string;
     onRetry: () => void;
-    onEdit: (course: Course) => void;
-    onDelete: (course: Course) => void;
+
+    // Buổi 8: Sửa và Xóa là không bắt buộc
+    onEdit?: (course: Course) => void;
+    onDelete?: (course: Course) => void;
 }
 
 export default function CourseList({
@@ -18,6 +20,7 @@ export default function CourseList({
                                        onEdit,
                                        onDelete,
                                    }: CourseListProps) {
+
     if (state === "loading") {
         return <p>Đang tải danh sách môn học...</p>;
     }
@@ -26,7 +29,10 @@ export default function CourseList({
         return (
             <div style={{ color: "#b91c1c" }}>
                 <p>{errorMessage}</p>
-                <button onClick={onRetry}>Thử lại</button>
+
+                <button onClick={onRetry}>
+                    Thử lại
+                </button>
             </div>
         );
     }
@@ -34,6 +40,9 @@ export default function CourseList({
     if (state === "empty") {
         return <p>Không tìm thấy môn học nào phù hợp.</p>;
     }
+
+    // Chỉ hiện cột Thao tác khi có onEdit hoặc onDelete
+    const showActions = !!onEdit || !!onDelete;
 
     return (
         <table
@@ -52,7 +61,10 @@ export default function CourseList({
                 <th>Tên môn học</th>
                 <th>Số tín chỉ</th>
                 <th>Số chỗ còn lại</th>
-                <th>Thao tác</th>
+
+                {showActions && (
+                    <th>Thao tác</th>
+                )}
             </tr>
             </thead>
 
@@ -65,7 +77,9 @@ export default function CourseList({
                     }}
                 >
                     <td>{course.tenMonHoc}</td>
+
                     <td>{course.soTinChi}</td>
+
                     <td
                         style={{
                             color:
@@ -74,24 +88,37 @@ export default function CourseList({
                                     : "inherit",
                         }}
                     >
-                        {course.soChoConLai} / {course.soChoToiDa}
+                        {course.soChoConLai} /{" "}
+                        {course.soChoToiDa}
                     </td>
 
-                    <td>
-                        <button onClick={() => onEdit(course)}>
-                            Sửa
-                        </button>
+                    {showActions && (
+                        <td>
+                            {onEdit && (
+                                <button
+                                    onClick={() =>
+                                        onEdit(course)
+                                    }
+                                >
+                                    Sửa
+                                </button>
+                            )}
 
-                        <button
-                            onClick={() => onDelete(course)}
-                            style={{
-                                marginLeft: 8,
-                                color: "#b91c1c",
-                            }}
-                        >
-                            Xóa
-                        </button>
-                    </td>
+                            {onDelete && (
+                                <button
+                                    onClick={() =>
+                                        onDelete(course)
+                                    }
+                                    style={{
+                                        marginLeft: 8,
+                                        color: "#b91c1c",
+                                    }}
+                                >
+                                    Xóa
+                                </button>
+                            )}
+                        </td>
+                    )}
                 </tr>
             ))}
             </tbody>
