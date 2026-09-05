@@ -1,0 +1,75 @@
+package vn.edu.crs.courseservice.Controller;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import vn.edu.crs.courseservice.dto.CourseDTO;
+import vn.edu.crs.courseservice.service.CourseService;
+
+@RestController
+@RequestMapping("/courses")
+@RequiredArgsConstructor
+public class CourseController {
+
+    private final CourseService courseService;
+
+    // =========================
+    // 1. GET ALL + SEARCH + PAGINATION
+    //    BUỔI 3
+    // =========================
+    @GetMapping
+    public Page<CourseDTO> search(
+            @RequestParam(required = false) String keyword,
+            Pageable pageable) {
+
+        return courseService.search(keyword, pageable);
+    }
+
+    // =========================
+    // 2. GET BY ID
+    //    BUỔI 2
+    // =========================
+    @GetMapping("/{id}")
+    public CourseDTO getById(@PathVariable Long id) {
+
+        return courseService.getById(id);
+    }
+
+    // =========================
+    // 3. CREATE
+    //    BUỔI 2
+    // =========================
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CourseDTO create(
+            @Valid @RequestBody CourseDTO dto) {
+
+        return courseService.create(dto);
+    }
+
+    // =========================
+    // 4. UPDATE
+    //    BUỔI 2
+    // =========================
+    @PutMapping("/{id}")
+    public CourseDTO update(
+            @PathVariable Long id,
+            @Valid @RequestBody CourseDTO dto) {
+
+        return courseService.update(id, dto);
+    }
+
+    // =========================
+    // 5. DELETE
+    //    BUỔI 2
+    // =========================
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+
+        courseService.delete(id);
+    }
+}

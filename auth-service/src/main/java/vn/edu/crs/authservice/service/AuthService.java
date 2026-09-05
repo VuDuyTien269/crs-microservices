@@ -3,6 +3,7 @@ package vn.edu.crs.authservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import vn.edu.crs.authservice.dto.LoginRequestDTO;
 import vn.edu.crs.authservice.dto.LoginResponseDTO;
 import vn.edu.crs.authservice.entity.User;
@@ -39,12 +40,18 @@ public class AuthService {
             );
         }
 
+        // BUỔI 9:
+        // Thêm user.getId() vào JWT
         String token = jwtUtil.generateToken(
+                user.getId(),
                 user.getUsername(),
                 user.getRole()
         );
 
+        // BUỔI 9:
+        // Trả thêm userId cho Frontend
         return new LoginResponseDTO(
+                user.getId(),
                 token,
                 user.getUsername(),
                 user.getRole()

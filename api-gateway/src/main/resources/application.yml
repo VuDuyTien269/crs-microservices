@@ -3,13 +3,46 @@ spring:
     gateway:
       server:
         webflux:
+
           routes:
+
+            # ==========================================
+            # AUTH SERVICE
+            # ==========================================
             - id: auth-service
               uri: http://localhost:8081
               predicates:
                 - Path=/api/auth/**
               filters:
                 - RewritePath=/api/auth/(?<segment>.*), /auth/${segment}
+
+
+            # ==========================================
+            # API KEY MANAGEMENT
+            # ==========================================
+
+            # GET /api/api-keys
+            # POST /api/api-keys
+            - id: api-key-list
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/api-keys
+              filters:
+                - RewritePath=/api/api-keys, /api-keys
+
+
+            # DELETE /api/api-keys/{id}
+            - id: api-key-detail
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/api-keys/**
+              filters:
+                - RewritePath=/api/api-keys/(?<segment>.*), /api-keys/${segment}
+
+
+            # ==========================================
+            # COURSE SERVICE
+            # ==========================================
 
             - id: course-service-list
               uri: http://localhost:8082
@@ -18,12 +51,18 @@ spring:
               filters:
                 - RewritePath=/api/courses, /courses
 
+
             - id: course-service-detail
               uri: http://localhost:8082
               predicates:
                 - Path=/api/courses/**
               filters:
                 - RewritePath=/api/courses/(?<segment>.*), /courses/${segment}
+
+
+            # ==========================================
+            # REGISTRATION SERVICE
+            # ==========================================
 
             - id: registration-service-list
               uri: http://localhost:8083
@@ -32,12 +71,18 @@ spring:
               filters:
                 - RewritePath=/api/registrations, /registrations
 
+
             - id: registration-service-detail
               uri: http://localhost:8083
               predicates:
                 - Path=/api/registrations/**
               filters:
                 - RewritePath=/api/registrations/(?<segment>.*), /registrations/${segment}
+
+
+            # ==========================================
+            # PARTNER API
+            # ==========================================
 
             - id: course-service-partner
               uri: http://localhost:8082
@@ -46,6 +91,11 @@ spring:
               filters:
                 - RewritePath=/api/public/courses, /courses
 
+
+          # ==========================================
+          # CORS
+          # ==========================================
+
           globalcors:
             cors-configurations:
               '[/**]':
@@ -53,11 +103,26 @@ spring:
                 allowedMethods: "*"
                 allowedHeaders: "*"
 
+
+# ==========================================
+# JWT
+# ==========================================
+
 jwt:
   secret: CRS_AUTH_SERVICE_SECRET_KEY_2026_VU_DUY_TIEN_AUTHENTICATION
 
+
+# ==========================================
+# PARTNER API KEY
+# ==========================================
+
 partner:
   api-key: crs-partner-key-2026
+
+
+# ==========================================
+# ACTUATOR
+# ==========================================
 
 management:
   endpoints:
